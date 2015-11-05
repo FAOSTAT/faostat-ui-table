@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, numeral*/
 define(['jquery',
         'handlebars',
         'text!faostat_ui_table/html/templates.hbs',
@@ -7,7 +7,8 @@ define(['jquery',
         'faostatapiclient',
         'bootstrap',
         'sweetAlert',
-        'amplify'], function ($, Handlebars, templates, translate, FAOSTATCommons, FAOSTATAPIClient) {
+        'amplify',
+        'numeral'], function ($, Handlebars, templates, translate, FAOSTATCommons, FAOSTATAPIClient) {
 
     'use strict';
 
@@ -19,7 +20,13 @@ define(['jquery',
             prefix: 'faostat_ui_table_',
             placeholder_id: 'faostat_ui_table',
             data: null,
-            metadata: null
+            metadata: null,
+            show_codes: true,
+            show_units: true,
+            show_flags: true,
+            decimal_places: 2,
+            decimal_separator: '.',
+            thousand_separator: ','
 
         };
 
@@ -54,16 +61,33 @@ define(['jquery',
             rows = [],
             row,
             i,
-            j;
+            j,
+            formatter = '';
+
+        /* Prepare the value formatter. */
+        numeral.language('faostat', {
+            delimiters: {
+                thousands: this.CONFIG.thousand_separator,
+                decimal: this.CONFIG.decimal_separator
+            }
+        });
+        numeral.language('faostat');
+        formatter = '0' + this.CONFIG.thousand_separator + '0' + this.CONFIG.decimal_separator;
+        for (i = 0; i < this.CONFIG.decimal_places; i += 1) {
+            formatter += '0';
+        }
 
         /* Process data. */
         for (i = 0; i < this.CONFIG.data.length; i += 1) {
             row = {};
             row.cells = [];
             for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
-                row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                if (this.CONFIG.metadata.dsd[j].type === 'value') {
+                    row.cells.push(numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter));
+                } else {
+                    row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                }
             }
-            console.debug(row);
             rows.push(row);
         }
 
