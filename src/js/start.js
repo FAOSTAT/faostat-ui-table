@@ -17,7 +17,9 @@ define(['jquery',
 
             lang: 'E',
             prefix: 'faostat_ui_table_',
-            placeholder_id: 'faostat_ui_table'
+            placeholder_id: 'faostat_ui_table',
+            data: null,
+            metadata: null
 
         };
 
@@ -45,17 +47,35 @@ define(['jquery',
     TABLE.prototype.render = function () {
 
         /* Variables. */
-        var source, template, dynamic_data, html, that = this;
+        var source,
+            template,
+            dynamic_data,
+            html,
+            rows = [],
+            row,
+            i,
+            j;
+
+        /* Process data. */
+        for (i = 0; i < this.CONFIG.data.length; i += 1) {
+            row = {};
+            row.cells = [];
+            for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
+                row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+            }
+            console.debug(row);
+            rows.push(row);
+        }
 
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_table_structure').html();
         template = Handlebars.compile(source);
         dynamic_data = {
-            faostat_abbreviations_label: translate.faostat_abbreviations_label
+            headers: this.CONFIG.metadata.dsd,
+            rows: rows
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
-        $('#' + this.CONFIG.placeholder_id).html('YOUR TABLE HERE');
 
     };
 
