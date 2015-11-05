@@ -55,6 +55,7 @@ define(['jquery',
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
+        $('#' + this.CONFIG.placeholder_id).html('YOUR TABLE HERE');
 
     };
 
