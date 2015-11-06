@@ -5,9 +5,9 @@
                 <thead>
                     <tr>
                         {{#each headers}}
-                        <th>
-                            {{this}}
-                        </th>
+                            <th data-type='{{this.type}}'>
+                                {{this.label}}
+                            </th>
                         {{/each}}
                     </tr>
                 </thead>
@@ -15,8 +15,8 @@
                     {{#each rows}}
                         <tr>
                             {{#each this.cells}}
-                                <td>
-                                    {{this}}
+                                <td data-type='{{this.type}}'>
+                                    {{this.label}}
                                 </td>
                             {{/each}}
                         </tr>

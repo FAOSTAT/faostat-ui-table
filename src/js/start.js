@@ -84,26 +84,56 @@ define(['jquery',
             row.cells = [];
             for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
                 if (this.CONFIG.metadata.dsd[j].type === 'value') {
-                    row.cells.push(numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter));
-                    headers.push(this.CONFIG.metadata.dsd[j].label);
+                    row.cells.push({
+                        label: numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter),
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
                 } else if (this.CONFIG.metadata.dsd[j].type === 'code') {
                     if (this.CONFIG.show_codes) {
-                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
-                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                        row.cells.push({
+                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                        headers.push({
+                            label: this.CONFIG.metadata.dsd[j].label,
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
                     }
                 } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
                     if (this.CONFIG.show_units) {
-                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
-                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                        row.cells.push({
+                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                        headers.push({
+                            label: this.CONFIG.metadata.dsd[j].label,
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
                     }
-                } else if (this.CONFIG.metadata.dsd[j].dimension_id === 'flag') {
+                } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
                     if (this.CONFIG.show_flags) {
-                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
-                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                        row.cells.push({
+                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                        headers.push({
+                            label: this.CONFIG.metadata.dsd[j].label,
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
                     }
                 } else {
-                    row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
-                    headers.push(this.CONFIG.metadata.dsd[j].label);
+                    row.cells.push({
+                        label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
                 }
             }
             rows.push(row);
