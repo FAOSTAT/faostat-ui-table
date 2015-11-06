@@ -59,6 +59,7 @@ define(['jquery',
             dynamic_data,
             html,
             rows = [],
+            headers = [],
             row,
             i,
             j,
@@ -84,8 +85,25 @@ define(['jquery',
             for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
                 if (this.CONFIG.metadata.dsd[j].type === 'value') {
                     row.cells.push(numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter));
+                    headers.push(this.CONFIG.metadata.dsd[j].label);
+                } else if (this.CONFIG.metadata.dsd[j].type === 'code') {
+                    if (this.CONFIG.show_codes) {
+                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                    }
+                } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
+                    if (this.CONFIG.show_units) {
+                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                    }
+                } else if (this.CONFIG.metadata.dsd[j].dimension_id === 'flag') {
+                    if (this.CONFIG.show_flags) {
+                        row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                        headers.push(this.CONFIG.metadata.dsd[j].label);
+                    }
                 } else {
                     row.cells.push(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]);
+                    headers.push(this.CONFIG.metadata.dsd[j].label);
                 }
             }
             rows.push(row);
@@ -95,7 +113,7 @@ define(['jquery',
         source = $(templates).filter('#faostat_ui_table_structure').html();
         template = Handlebars.compile(source);
         dynamic_data = {
-            headers: this.CONFIG.metadata.dsd,
+            headers: headers,
             rows: rows
         };
         html = template(dynamic_data);
