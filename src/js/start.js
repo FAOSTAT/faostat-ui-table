@@ -26,7 +26,8 @@ define(['jquery',
             show_flags: true,
             decimal_places: 2,
             decimal_separator: '.',
-            thousand_separator: ','
+            thousand_separator: ',',
+            page_size: 25
 
         };
 
@@ -63,7 +64,8 @@ define(['jquery',
             row,
             i,
             j,
-            formatter = '';
+            formatter = '',
+            pages = [];
 
         /* Prepare the value formatter. */
         numeral.language('faostat', {
@@ -78,6 +80,14 @@ define(['jquery',
             formatter += '0';
         }
 
+        /* Process headers. */
+        for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
+            headers.push({
+                label: this.CONFIG.metadata.dsd[j].label,
+                type: this.CONFIG.metadata.dsd[j].type
+            });
+        }
+
         /* Process data. */
         for (i = 0; i < this.CONFIG.data.length; i += 1) {
             row = {};
@@ -88,18 +98,10 @@ define(['jquery',
                         label: numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter),
                         type: this.CONFIG.metadata.dsd[j].type
                     });
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
                 } else if (this.CONFIG.metadata.dsd[j].type === 'code') {
                     if (this.CONFIG.show_codes) {
                         row.cells.push({
                             label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                        headers.push({
-                            label: this.CONFIG.metadata.dsd[j].label,
                             type: this.CONFIG.metadata.dsd[j].type
                         });
                     }
@@ -109,19 +111,11 @@ define(['jquery',
                             label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
                             type: this.CONFIG.metadata.dsd[j].type
                         });
-                        headers.push({
-                            label: this.CONFIG.metadata.dsd[j].label,
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
                     }
                 } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
                     if (this.CONFIG.show_flags) {
                         row.cells.push({
                             label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                        headers.push({
-                            label: this.CONFIG.metadata.dsd[j].label,
                             type: this.CONFIG.metadata.dsd[j].type
                         });
                     }
@@ -130,24 +124,38 @@ define(['jquery',
                         label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
                         type: this.CONFIG.metadata.dsd[j].type
                     });
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
                 }
             }
             rows.push(row);
         }
+
+        /* Create pager. */
+        var pages_number = parseInt(this.CONFIG.data.length / this.CONFIG.page_size);
+        console.debug(this.CONFIG.data.length);
+        console.debug(this.CONFIG.page_size);
+        console.debug(pages_number);
+        if (this.CONFIG.data.length % this.CONFIG.page_size !== 0) {
+            pages_number += 1;
+        }
+        console.debug(pages_number);
+        for (i = 1; i <= pages_number; i += 1) {
+            pages.push(i);
+        }
+        console.debug(pages);
 
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_table_structure').html();
         template = Handlebars.compile(source);
         dynamic_data = {
             headers: headers,
-            rows: rows
+            rows: rows,
+            pages: pages
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
+
+        /* Set active page. */
+        $('#li_1').addClass('active');
 
     };
 
