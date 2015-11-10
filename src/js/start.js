@@ -27,7 +27,10 @@ define(['jquery',
             decimal_places: 2,
             decimal_separator: '.',
             thousand_separator: ',',
-            page_size: 25
+            page_size: 25,
+            onPageClick: function (config) {
+                console.debug('click on page ' + config.page_number);
+            }
 
         };
 
@@ -65,7 +68,9 @@ define(['jquery',
             i,
             j,
             formatter = '',
-            pages = [];
+            pages = [],
+            pages_number,
+            that = this;
 
         /* Prepare the value formatter. */
         numeral.language('faostat', {
@@ -130,18 +135,13 @@ define(['jquery',
         }
 
         /* Create pager. */
-        var pages_number = parseInt(this.CONFIG.data.length / this.CONFIG.page_size);
-        console.debug(this.CONFIG.data.length);
-        console.debug(this.CONFIG.page_size);
-        console.debug(pages_number);
-        if (this.CONFIG.data.length % this.CONFIG.page_size !== 0) {
+        pages_number = parseInt(this.CONFIG.data[0].NoRecords / this.CONFIG.page_size, 10);
+        if (this.CONFIG.data[0].NoRecords % this.CONFIG.page_size !== 0) {
             pages_number += 1;
         }
-        console.debug(pages_number);
         for (i = 1; i <= pages_number; i += 1) {
             pages.push(i);
         }
-        console.debug(pages);
 
         /* Load main structure. */
         source = $(templates).filter('#faostat_ui_table_structure').html();
@@ -155,8 +155,23 @@ define(['jquery',
         $('#' + this.CONFIG.placeholder_id).html(html);
 
         /* Set active page. */
-        $('#li_1').addClass('active');
+        $('#li_' + parseInt(1 + this.CONFIG.data[0].RecordOrder / this.CONFIG.page_size, 10)).addClass('active');
 
+        /* Add click listener. */
+        $('.pagination li').click(function () {
+            that.onPageClick(this);
+        });
+
+    };
+
+    TABLE.prototype.onPageClick = function (clicked_item) {
+        $('.pagination li').removeClass('active');
+        var page_number = clicked_item.id.substring(1 + clicked_item.id.indexOf('_'));
+        $('#li_' + page_number).addClass('active');
+        this.CONFIG.onPageClick({
+            page_number: page_number,
+            context: this.CONFIG.context || this
+        });
     };
 
     return TABLE;

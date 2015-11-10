@@ -1,21 +1,21 @@
 <script type='text/x-handlebars-template' id='faostat_ui_table_structure'>
     <div class='row'>
-        <div class='col-lg-12' style='max-height: 250px; overflow: auto;'>
-            <table class='table table-responsive table-condensed table-striped table-bordered table-hover' style='width: 100%;'>
-                <thead>
+        <div class='col-lg-12'>
+            <table class='table table-responsive table-condensed table-striped table-bordered table-hover table-faostat'>
+                <thead style='display: block;'>
                     <tr>
                         {{#each headers}}
-                            <th data-type='{{this.type}}'>
+                            <th data-type='{{this.type}}' style='width: 75px; text-align: center; vertical-align: middle; background-color: #23527c; border-color: #23527c; color: #fff;'>
                                 {{this.label}}
                             </th>
                         {{/each}}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style='display: block; overflow: auto; height: 250px;'>
                     {{#each rows}}
                         <tr>
                             {{#each this.cells}}
-                                <td data-type='{{this.type}}'>
+                                <td data-type='{{this.type}}' style='width: 75px; vertical-align: middle;'>
                                     {{this.label}}
                                 </td>
                             {{/each}}
