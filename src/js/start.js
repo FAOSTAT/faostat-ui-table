@@ -87,10 +87,33 @@ define(['jquery',
 
         /* Process headers. */
         for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
-            headers.push({
-                label: this.CONFIG.metadata.dsd[j].label,
-                type: this.CONFIG.metadata.dsd[j].type
-            });
+            if (this.CONFIG.metadata.dsd[j].type === 'code') {
+                if (this.CONFIG.show_codes) {
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                }
+            } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
+                if (this.CONFIG.show_flags) {
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                }
+            } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
+                if (this.CONFIG.show_units) {
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                }
+            } else {
+                headers.push({
+                    label: this.CONFIG.metadata.dsd[j].label,
+                    type: this.CONFIG.metadata.dsd[j].type
+                });
+            }
         }
 
         /* Process data. */
