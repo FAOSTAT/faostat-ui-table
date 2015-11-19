@@ -101,6 +101,13 @@ define(['jquery',
                         type: this.CONFIG.metadata.dsd[j].type
                     });
                 }
+            } else if (this.CONFIG.metadata.dsd[j].type === 'flag_label') {
+                if (this.CONFIG.show_flags) {
+                    headers.push({
+                        label: this.CONFIG.metadata.dsd[j].label,
+                        type: this.CONFIG.metadata.dsd[j].type
+                    });
+                }
             } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
                 if (this.CONFIG.show_units) {
                     headers.push({
@@ -141,6 +148,13 @@ define(['jquery',
                         });
                     }
                 } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
+                    if (this.CONFIG.show_flags) {
+                        row.cells.push({
+                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                    }
+                } else if (this.CONFIG.metadata.dsd[j].type === 'flag_label') {
                     if (this.CONFIG.show_flags) {
                         row.cells.push({
                             label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
