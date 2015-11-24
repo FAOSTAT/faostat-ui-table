@@ -38,12 +38,8 @@ define(['jquery',
 
     TABLE.prototype.init = function (config) {
 
-        console.debug(config);
-
         /* Extend default configuration. */
         this.CONFIG = $.extend(true, {}, this.CONFIG, config);
-
-        console.debug(this.CONFIG);
 
         /* Fix the language, if needed. */
         this.CONFIG.lang = this.CONFIG.lang !== null ? this.CONFIG.lang : 'en';
