@@ -28,8 +28,8 @@ define(['jquery',
             decimal_separator: '.',
             thousand_separator: ',',
             page_size: 25,
-            onPageClick: function (config) {
-                console.debug('click on page ' + config.page_number);
+            onPageClick: function () {
+                /* Restore the "config" argument of the function. */
             }
 
         };
@@ -195,6 +195,7 @@ define(['jquery',
         $('#li_' + parseInt(1 + this.CONFIG.data[0].RecordOrder / this.CONFIG.page_size, 10)).addClass('active');
 
         /* Add click listener. */
+        $('.pagination li').off();
         $('.pagination li').click(function () {
             that.onPageClick(this);
         });
@@ -212,7 +213,7 @@ define(['jquery',
     };
 
     TABLE.prototype.dispose = function () {
-
+        $('.pagination li').off();
     };
 
     return TABLE;
