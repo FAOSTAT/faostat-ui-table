@@ -211,6 +211,10 @@ define(['jquery',
         });
     };
 
+    TABLE.prototype.dispose = function () {
+
+    };
+
     return TABLE;
 
 });
