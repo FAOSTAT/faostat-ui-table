@@ -1,3 +1,18 @@
 .table-faostat {
   width: 100%;
 }
+
+.fa.fa-fast-backward.fa-stack-1x:hover {
+  color: darkgreen;
+}
+
+.fa.fa-square-o.fa-stack-2x:hover {
+  color: blue;
+}
+
+.next_page_button {
+  cursor: pointer;
+  :hover {
+    color: red;
+  }
+}

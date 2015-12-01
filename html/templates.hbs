@@ -24,16 +24,49 @@
                 </tbody>
             </table>
         </div>
+        <!--<div class='col-lg-12 text-center'>-->
+            <!--<ul class='pagination'>-->
+                <!--{{#each pages}}-->
+                    <!--<li id='li_{{this}}'>-->
+                        <!--<a id='page_{{this}}'>-->
+                            <!--{{this}}-->
+                        <!--</a>-->
+                    <!--</li>-->
+                <!--{{/each}}-->
+            <!--</ul>-->
+        <!--</div>-->
+    </div>
+    <div class='row'>
         <div class='col-lg-12 text-center'>
-            <ul class='pagination'>
-                {{#each pages}}
-                    <li id='li_{{this}}'>
-                        <a id='page_{{this}}'>
-                            {{this}}
-                        </a>
-                    </li>
-                {{/each}}
-            </ul>
+            <span class='first_page_button'>
+                <span class='fa-stack fa-lg'>
+                    <i class='fa fa-square-o fa-stack-2x'></i>
+                    <i class='fa fa-fast-backward fa-stack-1x'></i>
+                </span>
+            </span>
+            <span class='previous_page_button'>
+                <span class='fa-stack fa-lg'>
+                    <i class='fa fa-square-o fa-stack-2x'></i>
+                    <i class='fa fa-backward fa-stack-1x'></i>
+                </span>
+            </span>
+            <span class='next_page_button'>
+                <span class='fa-stack fa-lg'>
+                    <i class='fa fa-square-o fa-stack-2x'></i>
+                    <i class='fa fa-forward fa-stack-1x'></i>
+                </span>
+            </span>
+            <span class='last_page_button'>
+                <span class='fa-stack fa-lg'>
+                    <i class='fa fa-square-o fa-stack-2x'></i>
+                    <i class='fa fa-fast-forward fa-stack-1x'></i>
+                </span>
+            </span>
+            &nbsp;&nbsp;&nbsp;
+            <span style='line-height: 32px;'>
+                Page <b id='current_page'>{{current_page}}</b> / <b>{{total_pages}}</b>.
+            </span>
         </div>
     </div>
+    <br>
 </script>

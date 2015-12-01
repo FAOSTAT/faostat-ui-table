@@ -29,6 +29,7 @@ define(['jquery',
             decimal_separator: '.',
             thousand_separator: ',',
             page_size: 25,
+            current_page: 1,
             onPageClick: function () {
                 /* Restore the "config" argument of the function. */
             }
@@ -74,7 +75,6 @@ define(['jquery',
             i,
             j,
             formatter = '',
-            pages = [],
             pages_number,
             that = this;
 
@@ -178,12 +178,9 @@ define(['jquery',
         }
 
         /* Create pager. */
-        pages_number = parseInt(this.CONFIG.data[0].NoRecords / this.CONFIG.page_size, 10);
+        this.CONFIG.total_pages = parseInt(this.CONFIG.data[0].NoRecords / this.CONFIG.page_size, 10);
         if (this.CONFIG.data[0].NoRecords % this.CONFIG.page_size !== 0) {
-            pages_number += 1;
-        }
-        for (i = 1; i <= pages_number; i += 1) {
-            pages.push(i);
+            this.CONFIG.total_pages += 1;
         }
 
         /* Load main structure. */
@@ -192,34 +189,51 @@ define(['jquery',
         dynamic_data = {
             headers: headers,
             rows: rows,
-            pages: pages
+            current_page: this.CONFIG.current_page,
+            total_pages: this.CONFIG.total_pages
         };
         html = template(dynamic_data);
         $('#' + this.CONFIG.placeholder_id).html(html);
 
-        /* Set active page. */
-        $('#li_' + parseInt(1 + this.CONFIG.data[0].RecordOrder / this.CONFIG.page_size, 10)).addClass('active');
-
         /* Add click listener. */
-        $('.pagination li').off();
-        $('.pagination li').click(function () {
-            that.onPageClick(this);
+        $('.next_page_button').off().click(function () {
+            that.CONFIG.current_page += 1;
+            if (that.CONFIG.current_page > that.CONFIG.total_pages) {
+                that.CONFIG.current_page = that.CONFIG.total_pages;
+            }
+            that.onPageClick();
+        });
+        $('.previous_page_button').off().click(function () {
+            that.CONFIG.current_page -= 1;
+            if (that.CONFIG.current_page < 1) {
+                that.CONFIG.current_page = 1;
+            }
+            that.onPageClick();
+        });
+        $('.first_page_button').off().click(function () {
+            that.CONFIG.current_page = 1;
+            that.onPageClick();
+        });
+        $('.last_page_button').off().click(function () {
+            that.CONFIG.current_page = that.CONFIG.total_pages;
+            that.onPageClick();
         });
 
     };
 
-    TABLE.prototype.onPageClick = function (clicked_item) {
-        $('.pagination li').removeClass('active');
-        var page_number = clicked_item.id.substring(1 + clicked_item.id.indexOf('_'));
-        $('#li_' + page_number).addClass('active');
+    TABLE.prototype.onPageClick = function () {
+        var that = this;
+        $('#current_page').html(that.CONFIG.current_page);
         this.CONFIG.onPageClick({
-            page_number: page_number,
-            context: this.CONFIG.context || this
+            page_number: that.CONFIG.current_page
         });
     };
 
     TABLE.prototype.dispose = function () {
-        $('.pagination li').off();
+        $('.next_page_button').off();
+        $('.last_page_button').off();
+        $('.first_page_button').off();
+        $('.previous_page_button').off();
     };
 
     return TABLE;
