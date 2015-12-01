@@ -54,7 +54,7 @@ define(['jquery',
 
         /* Sort metadata. */
         this.CONFIG.metadata.dsd = _.sortBy(this.CONFIG.metadata.dsd, function (o) {
-            return parseInt(o.index);
+            return parseInt(o.index, 10);
         });
 
         /* Render. */
@@ -135,10 +135,17 @@ define(['jquery',
             row.cells = [];
             for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
                 if (this.CONFIG.metadata.dsd[j].type === 'value') {
-                    row.cells.push({
-                        label: numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter),
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
+                    if (this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key] === undefined) {
+                        row.cells.push({
+                            label: undefined,
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                    } else {
+                        row.cells.push({
+                            label: numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter),
+                            type: this.CONFIG.metadata.dsd[j].type
+                        });
+                    }
                 } else if (this.CONFIG.metadata.dsd[j].type === 'code') {
                     if (this.CONFIG.show_codes) {
                         row.cells.push({
