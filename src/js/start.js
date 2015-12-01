@@ -5,10 +5,11 @@ define(['jquery',
         'i18n!faostat_ui_table/nls/translate',
         'faostat_commons',
         'faostatapiclient',
+        'underscore',
         'bootstrap',
         'sweetAlert',
         'amplify',
-        'numeral'], function ($, Handlebars, templates, translate, FAOSTATCommons, FAOSTATAPIClient) {
+        'numeral'], function ($, Handlebars, templates, translate, FAOSTATCommons, FAOSTATAPIClient, _) {
 
     'use strict';
 
@@ -49,6 +50,11 @@ define(['jquery',
 
         /* Initiate FAOSTAT API's client. */
         this.CONFIG.api = new FAOSTATAPIClient();
+
+        /* Sort metadata. */
+        this.CONFIG.metadata.dsd = _.sortBy(this.CONFIG.metadata.dsd, function (o) {
+            return parseInt(o.index);
+        });
 
         /* Render. */
         this.render();
