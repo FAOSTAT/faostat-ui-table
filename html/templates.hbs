@@ -1,7 +1,7 @@
 <script type='text/x-handlebars-template' id='faostat_ui_table_structure'>
     <div class='row'>
-        <div class='col-lg-12'>
-            <table class='table table-responsive table-condensed table-striped table-bordered table-hover table-faostat'>
+        <div class='col-lg-11'>
+            <table class='table table-responsive table-condensed table-striped table-bordered table-hover'>
                 <thead style='display: block;'>
                     <tr>
                         {{#each headers}}
@@ -27,32 +27,39 @@
     </div>
     <div class='row'>
         <div class='col-lg-12 text-center'>
-            <span class='first_page_button'>
-                <span class='fa-stack fa-lg'>
-                    <i class='fa fa-square-o fa-stack-2x'></i>
-                    <i class='fa fa-fast-backward fa-stack-1x'></i>
-                </span>
-            </span>
-            <span class='previous_page_button'>
-                <span class='fa-stack fa-lg'>
-                    <i class='fa fa-square-o fa-stack-2x'></i>
-                    <i class='fa fa-backward fa-stack-1x'></i>
-                </span>
-            </span>
-            <span class='next_page_button'>
-                <span class='fa-stack fa-lg'>
-                    <i class='fa fa-square-o fa-stack-2x'></i>
-                    <i class='fa fa-forward fa-stack-1x'></i>
-                </span>
-            </span>
-            <span class='last_page_button'>
-                <span class='fa-stack fa-lg'>
-                    <i class='fa fa-square-o fa-stack-2x'></i>
-                    <i class='fa fa-fast-forward fa-stack-1x'></i>
-                </span>
-            </span>
-            &nbsp;&nbsp;&nbsp;
-            <span style='line-height: 32px;'>
+            <ul class='pagination' style='margin-bottom: 0; margin-top: 0;'>
+                <li>
+                    <a>
+                        <span aria-hidden='true'>
+                            <i class='fa fa-fast-backward first_page_button'></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <span aria-hidden='true'>
+                            <i class='fa fa-backward previous_page_button'></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <span aria-hidden='true'>
+                            <i class='fa fa-forward next_page_button'></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <span aria-hidden='true'>
+                            <i class='fa fa-fast-forward last_page_button'></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class='col-lg-12 text-center'>
+            <span>
                 Page <b id='current_page'>{{current_page}}</b> / <b>{{total_pages}}</b>.
             </span>
         </div>
