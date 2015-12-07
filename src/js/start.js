@@ -2,14 +2,12 @@
 define(['jquery',
         'handlebars',
         'text!faostat_ui_table/html/templates.hbs',
-        'i18n!faostat_ui_table/nls/translate',
-        'faostat_commons',
         'faostatapiclient',
         'underscore',
         'bootstrap',
         'sweetAlert',
         'amplify',
-        'numeral'], function ($, Handlebars, templates, translate, FAOSTATCommons, FAOSTATAPIClient, _) {
+        'numeral'], function ($, Handlebars, templates, FAOSTATAPIClient, _) {
 
     'use strict';
 
@@ -45,9 +43,6 @@ define(['jquery',
 
         /* Fix the language, if needed. */
         this.CONFIG.lang = this.CONFIG.lang !== null ? this.CONFIG.lang : 'en';
-
-        /* Store FAOSTAT language. */
-        this.CONFIG.lang_faostat = FAOSTATCommons.iso2faostat(this.CONFIG.lang);
 
         /* Initiate FAOSTAT API's client. */
         this.CONFIG.api = new FAOSTATAPIClient();
