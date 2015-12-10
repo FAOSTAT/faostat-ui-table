@@ -1,6 +1,5 @@
 <script type='text/x-handlebars-template' id='faostat_ui_table_structure'>
-    <div class='row'>
-        <div class='col-xs-12'>
+    <div class="fs-table-holder">
             <table class='table table-responsive table-striped table-bordered table-hover'>
                 <thead >
                     <tr>
@@ -23,10 +22,7 @@
                     {{/each}}
                 </tbody>
             </table>
-        </div>
     </div>
-    <div class='row'>
-        <div class='col-xs-12 text-center'>
             <ul class='pagination'>
                 <li>
                     <a>
@@ -57,12 +53,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
-        <div class='col-xs-12'>
-            <span>
+            <span class="fs-page-number">
                 Page <b id='current_page'>{{current_page}}</b> / <b>{{total_pages}}</b>.
             </span>
-        </div>
-    </div>
-    <br>
 </script>
