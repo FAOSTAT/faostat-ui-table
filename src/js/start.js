@@ -1,13 +1,12 @@
 /*global define, numeral*/
 define(['jquery',
+        'loglevel',
         'handlebars',
         'text!faostat_ui_table/html/templates.hbs',
-        'faostatapiclient',
         'underscore',
         'bootstrap',
-        'sweetAlert',
         'amplify',
-        'numeral'], function ($, Handlebars, templates, FAOSTATAPIClient, _) {
+        'numeral'], function ($, log, Handlebars, templates, _) {
 
     'use strict';
 
@@ -15,8 +14,6 @@ define(['jquery',
 
         this.CONFIG = {
 
-            lang: 'E',
-            prefix: 'faostat_ui_table_',
             placeholder_id: 'faostat_ui_table',
             data: null,
             metadata: null,
@@ -38,14 +35,10 @@ define(['jquery',
 
     TABLE.prototype.init = function (config) {
 
+        //log.info("TABLE.init; config", config)
+
         /* Extend default configuration. */
         this.CONFIG = $.extend(true, {}, this.CONFIG, config);
-
-        /* Fix the language, if needed. */
-        this.CONFIG.lang = this.CONFIG.lang !== null ? this.CONFIG.lang : 'en';
-
-        /* Initiate FAOSTAT API's client. */
-        this.CONFIG.api = new FAOSTATAPIClient();
 
         /* Sort metadata. */
         this.CONFIG.metadata.dsd = _.sortBy(this.CONFIG.metadata.dsd, function (o) {
@@ -89,37 +82,35 @@ define(['jquery',
         /* Process headers. */
         for (j = 0; j < this.CONFIG.metadata.dsd.length; j += 1) {
             if (this.CONFIG.metadata.dsd[j].type === 'code') {
-                if (this.CONFIG.show_codes) {
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
-                }
+                headers.push({
+                    label: this.CONFIG.metadata.dsd[j].label,
+                    type: this.CONFIG.metadata.dsd[j].type,
+                    show: this.CONFIG.show_codes
+                });
             } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
-                if (this.CONFIG.show_flags) {
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
-                }
+                headers.push({
+                    label: this.CONFIG.metadata.dsd[j].label,
+                    type: this.CONFIG.metadata.dsd[j].type,
+                    show: this.CONFIG.show_flags
+                });
             } else if (this.CONFIG.metadata.dsd[j].type === 'flag_label') {
-                if (this.CONFIG.show_flags) {
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
-                }
+                headers.push({
+                    label: this.CONFIG.metadata.dsd[j].label,
+                    type: this.CONFIG.metadata.dsd[j].type,
+                    show: this.CONFIG.show_flags
+                });
+
             } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
-                if (this.CONFIG.show_units) {
-                    headers.push({
-                        label: this.CONFIG.metadata.dsd[j].label,
-                        type: this.CONFIG.metadata.dsd[j].type
-                    });
-                }
+                headers.push({
+                    label: this.CONFIG.metadata.dsd[j].label,
+                    type: this.CONFIG.metadata.dsd[j].type,
+                    show: this.CONFIG.show_units
+                });
             } else {
                 headers.push({
                     label: this.CONFIG.metadata.dsd[j].label,
-                    type: this.CONFIG.metadata.dsd[j].type
+                    type: this.CONFIG.metadata.dsd[j].type,
+                    show: true
                 });
             }
         }
@@ -133,51 +124,56 @@ define(['jquery',
                     if (this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key] === undefined) {
                         row.cells.push({
                             label: undefined,
-                            type: this.CONFIG.metadata.dsd[j].type
+                            type: this.CONFIG.metadata.dsd[j].type,
+                            show: true
                         });
                     } else {
                         row.cells.push({
                             label: numeral(this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key]).format(formatter),
-                            type: this.CONFIG.metadata.dsd[j].type
+                            type: this.CONFIG.metadata.dsd[j].type,
+                            show: true
                         });
                     }
                 } else if (this.CONFIG.metadata.dsd[j].type === 'code') {
-                    if (this.CONFIG.show_codes) {
-                        row.cells.push({
-                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                    }
+                    row.cells.push({
+                        label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                        type: this.CONFIG.metadata.dsd[j].type,
+                        show: this.CONFIG.show_codes
+                    });
+
                 } else if (this.CONFIG.metadata.dsd[j].type === 'unit') {
-                    if (this.CONFIG.show_units) {
-                        row.cells.push({
-                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                    }
+                    row.cells.push({
+                        label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                        type: this.CONFIG.metadata.dsd[j].type,
+                        show: this.CONFIG.show_units
+                    });
+
                 } else if (this.CONFIG.metadata.dsd[j].type === 'flag') {
-                    if (this.CONFIG.show_flags) {
-                        row.cells.push({
-                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                    }
+                    row.cells.push({
+                        label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                        type: this.CONFIG.metadata.dsd[j].type,
+                        show: this.CONFIG.show_flags
+                    });
+
                 } else if (this.CONFIG.metadata.dsd[j].type === 'flag_label') {
-                    if (this.CONFIG.show_flags) {
-                        row.cells.push({
-                            label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                            type: this.CONFIG.metadata.dsd[j].type
-                        });
-                    }
+                    row.cells.push({
+                        label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
+                        type: this.CONFIG.metadata.dsd[j].type,
+                        show: this.CONFIG.show_flags
+                    });
+
                 } else {
                     row.cells.push({
                         label: this.CONFIG.data[i][this.CONFIG.metadata.dsd[j].key],
-                        type: this.CONFIG.metadata.dsd[j].type
+                        type: this.CONFIG.metadata.dsd[j].type,
+                        show: true
                     });
                 }
             }
             rows.push(row);
         }
+
+        //log.info('TABLE.render; rows', rows)
 
         /* Create pager. */
         this.CONFIG.total_pages = parseInt(this.CONFIG.data[0].NoRecords / this.CONFIG.page_size, 10);

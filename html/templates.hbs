@@ -3,28 +3,28 @@
         {{preview_label}}
     </h1>
     <div class="fs-table-holder">
-            <table class='table table-responsive table-striped table-bordered table-hover'>
-                <thead >
+        <table class='table table-responsive table-striped table-bordered table-hover'>
+            <thead >
+                <tr>
+                    {{#each headers}}
+                        <th style='{{#unless this.show}}display:none{{/unless}}' data-type='{{this.type}}' >
+                            {{this.label}}
+                        </th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each rows}}
                     <tr>
-                        {{#each headers}}
-                            <th data-type='{{this.type}}' >
+                        {{#each this.cells}}
+                            <td style='{{#unless this.show}}display:none{{/unless}}' data-type='{{this.type}}'>
                                 {{this.label}}
-                            </th>
+                            </td>
                         {{/each}}
                     </tr>
-                </thead>
-                <tbody>
-                    {{#each rows}}
-                        <tr>
-                            {{#each this.cells}}
-                                <td data-type='{{this.type}}'>
-                                    {{this.label}}
-                                </td>
-                            {{/each}}
-                        </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
             <ul class='pagination'>
                 <li>
