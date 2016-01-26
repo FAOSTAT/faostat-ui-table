@@ -52,6 +52,8 @@ define(['jquery',
 
     TABLE.prototype.render = function () {
 
+        log.info('TABLE.render;')
+
         /* Variables. */
         var source,
             template,
@@ -221,7 +223,8 @@ define(['jquery',
 
     TABLE.prototype.onPageClick = function () {
         var that = this;
-        $('#current_page').html(that.CONFIG.current_page);
+        log.info('TABLE.onPageClick;', that.CONFIG.current_page, that.CONFIG.total_pages)
+        //$('#current_page').html(that.CONFIG.current_page);
         this.CONFIG.onPageClick({
             page_number: that.CONFIG.current_page
         });
