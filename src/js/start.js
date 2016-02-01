@@ -37,10 +37,10 @@ define(['jquery',
 
     TABLE.prototype.init = function (config) {
 
-        log.info("TABLE.init; config", config)
-
         /* Extend default configuration. */
         this.CONFIG = $.extend(true, {}, this.CONFIG, config);
+
+        log.info("TABLE.init; config", this.CONFIG);
 
         this.api = new FAOSTATAPI();
 
@@ -105,6 +105,9 @@ define(['jquery',
                 decimal: this.CONFIG.decimal_separator
             }
         });
+
+        console.log(this.CONFIG.thousand_separator);
+
         numeral.language('faostat');
         formatter = '0' + this.CONFIG.thousand_separator + '0' + this.CONFIG.decimal_separator;
         for (i = 0; i < this.CONFIG.decimal_places; i += 1) {
