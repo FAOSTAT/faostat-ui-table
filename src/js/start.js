@@ -59,7 +59,7 @@ define(['jquery',
 
         amplify.publish(E.WAITING_SHOW);
 
-        this.api.data(this.request).then(function(d) {
+        this.api.databean(this.request).then(function(d) {
 
             amplify.publish(E.WAITING_HIDE);
 
