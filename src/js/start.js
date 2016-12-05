@@ -15,7 +15,6 @@ define(['jquery',
     function TABLE() {
 
         this.CONFIG = {
-
             //placeholder_id: 'faostat_ui_table',
             data: null,
             metadata: null,
@@ -274,5 +273,4 @@ define(['jquery',
     };
 
     return TABLE;
-
 });
